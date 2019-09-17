@@ -21,18 +21,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import android.util.Log
 import com.example.android.codelabs.paging.api.GithubService
-import com.example.android.codelabs.paging.api.searchRepos
 import com.example.android.codelabs.paging.db.GithubLocalCache
 import com.example.android.codelabs.paging.model.Repo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import java.io.IOException
 
 /**
  * This boundary callback gets notified when user reaches to the edges of the list for example when
  * the database cannot provide any more data.
  **/
+private const val IN_QUALIFIER = "in:name,description"
+
 class RepoBoundaryCallback(
     private val query: String,
     private val service: GithubService,
-    private val cache: GithubLocalCache
+    private val cache: GithubLocalCache,
+    private val coroutineScope: CoroutineScope,
+    private val dispatcherProvider: CoroutinesDispatcherProvider
 ) : PagedList.BoundaryCallback<Repo>() {
 
     companion object {
@@ -68,16 +74,30 @@ class RepoBoundaryCallback(
 
     private fun requestAndSaveData(query: String) {
         if (isRequestInProgress) return
+        fetchGitHubReposFromNetworkAndPersist(query)
+    }
 
+    private fun fetchGitHubReposFromNetworkAndPersist(query: String) {
         isRequestInProgress = true
-        searchRepos(service, query, lastRequestedPage, NETWORK_PAGE_SIZE, { repos ->
-            cache.insert(repos) {
-                lastRequestedPage++
+        coroutineScope.launch(dispatcherProvider.ioDispatcher) {
+            try {
+                val apiQuery = query + IN_QUALIFIER
+                val response = service.searchRepos(apiQuery, lastRequestedPage, NETWORK_PAGE_SIZE)
+
+                if (response.isSuccessful) {
+                    val repos = response.body()?.items ?: emptyList()
+                    cache.insert(repos)
+                    lastRequestedPage++
+                    isRequestInProgress = false
+                } else {
+                    _networkErrors.postValue(response.toString())
+                    isRequestInProgress = false
+                }
+            } catch (exception: IOException) {
+                Log.e("RepoBoundaryCallback", exception.message)
+                _networkErrors.postValue(exception.message)
                 isRequestInProgress = false
             }
-        }, { error ->
-            _networkErrors.postValue(error)
-            isRequestInProgress = false
-        })
+        }
     }
 }

@@ -18,8 +18,9 @@ package com.example.android.codelabs.paging.db
 
 import android.util.Log
 import androidx.paging.DataSource
+import com.example.android.codelabs.paging.data.CoroutinesDispatcherProvider
 import com.example.android.codelabs.paging.model.Repo
-import java.util.concurrent.Executor
+import kotlinx.coroutines.withContext
 
 /**
  * Class that handles the DAO local data source. This ensures that methods are triggered on the
@@ -27,18 +28,15 @@ import java.util.concurrent.Executor
  */
 class GithubLocalCache(
     private val repoDao: RepoDao,
-    private val ioExecutor: Executor
+    private val dispatcherProvider: CoroutinesDispatcherProvider
 ) {
 
     /**
      * Insert a list of repos in the database, on a background thread.
      */
-    fun insert(repos: List<Repo>, insertFinished: () -> Unit) {
-        ioExecutor.execute {
-            Log.d("GithubLocalCache", "inserting ${repos.size} repos")
-            repoDao.insert(repos)
-            insertFinished()
-        }
+    suspend fun insert(repos: List<Repo>) = withContext(dispatcherProvider.ioDispatcher) {
+        Log.d("GithubLocalCache", "inserting ${repos.size} repos")
+        repoDao.insert(repos)
     }
 
     /**
