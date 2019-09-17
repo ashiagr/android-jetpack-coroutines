@@ -18,18 +18,25 @@ package com.example.android.codelabs.paging.data
 
 import androidx.paging.LivePagedListBuilder
 import android.util.Log
+import androidx.paging.PagedList
 import com.example.android.codelabs.paging.api.GithubService
 import com.example.android.codelabs.paging.db.GithubLocalCache
 import com.example.android.codelabs.paging.model.RepoSearchResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelChildren
 
 /**
  * Repository class that works with local and remote data sources.
  */
 class GithubRepository(
     private val service: GithubService,
-    private val cache: GithubLocalCache
+    private val cache: GithubLocalCache,
+    private val dispatcherProvider: CoroutinesDispatcherProvider
 ) {
 
+    private val parentJob = Job()
+    private val scope = CoroutineScope(dispatcherProvider.mainDispatcher + parentJob)
     /**
      * Search repositories whose names match the query.
      */
@@ -42,16 +49,24 @@ class GithubRepository(
         // every new query creates a new BoundaryCallback
         // The BoundaryCallback will observe when the user reaches to the edges of
         // the list and update the database with extra data
-        val boundaryCallback = RepoBoundaryCallback(query, service, cache)
+        val boundaryCallback = RepoBoundaryCallback(query, service, cache, scope, dispatcherProvider)
         val networkErrors = boundaryCallback.networkErrors
 
         // Get the paged list
-        val data = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)
+        val defaultConfig = PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setPageSize(DATABASE_PAGE_SIZE)
+                .build()
+        val data = LivePagedListBuilder(dataSourceFactory, defaultConfig)
                 .setBoundaryCallback(boundaryCallback)
                 .build()
 
         // Get the network errors exposed by the boundary callback
         return RepoSearchResult(data, networkErrors)
+    }
+
+    fun cancelAllRequests() {
+        parentJob.cancelChildren()
     }
 
     companion object {

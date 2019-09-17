@@ -55,8 +55,9 @@ ext {
     archComponentsVersion = '2.2.0-alpha04'
     roomVersion = '2.2.0-rc01'
     pagingVersion = '2.1.0'
-    retrofitVersion = "2.3.0"
+    retrofitVersion = "2.6.0"
     okhttpLoggingInterceptorVersion = "3.9.0"
+    coroutinesVersion = "1.2.1"
 
     runnerVersion = '1.1.0-alpha4'
     rulesVersion = "1.0.1"

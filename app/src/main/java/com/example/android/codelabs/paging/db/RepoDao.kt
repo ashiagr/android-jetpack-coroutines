@@ -30,7 +30,7 @@ import com.example.android.codelabs.paging.model.Repo
 interface RepoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(posts: List<Repo>)
+    suspend fun insert(posts: List<Repo>)
 
     // Do a similar query as the search API:
     // Look for repos that contain the query string in the name or in the description

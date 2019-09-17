@@ -26,7 +26,7 @@ import com.example.android.codelabs.paging.model.Repo
 import com.example.android.codelabs.paging.model.RepoSearchResult
 
 /**
- * ViewModel for the [SearchRepositoriesFragment] screen.
+ * ViewModel for the [SearchRepositoriesActivity] screen.
  * The ViewModel works with the [GithubRepository] to get the data.
  */
 class SearchRepositoriesViewModel(private val repository: GithubRepository) : ViewModel() {
@@ -52,4 +52,9 @@ class SearchRepositoriesViewModel(private val repository: GithubRepository) : Vi
      * Get the last query value.
      */
     fun lastQueryValue(): String? = queryLiveData.value
+
+    override fun onCleared() {
+        super.onCleared()
+        repository.cancelAllRequests()
+    }
 }
