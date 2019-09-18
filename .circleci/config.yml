@@ -33,6 +33,9 @@ jobs:
       - run:
           name: Run Lint
           command: ./gradlew lintDebug
+      - run:
+          name: Run Unit Tests
+          command: ./gradlew test
       - store_artifacts:
           path: app/build/reports
           destination: quality_reports
@@ -40,3 +43,5 @@ jobs:
           name: Quality Reports
           path: build/reports
           destination: quality_reports
+      - store_test_results:
+          path: app/build/test-results
