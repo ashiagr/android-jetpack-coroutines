@@ -9,20 +9,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.example.android.codelabs.paging.Injection
 import com.example.android.codelabs.paging.R
 
 import com.example.android.codelabs.paging.model.Repo
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_search_repositories.*
+import javax.inject.Inject
 
-class SearchRepositoriesFragment : Fragment() {
-    private lateinit var viewModel: SearchRepositoriesViewModel
+class SearchRepositoriesFragment : DaggerFragment() {
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel by viewModels<SearchRepositoriesViewModel> { viewModelFactory }
 
     private val adapter = ReposAdapter()
 
@@ -34,12 +38,6 @@ class SearchRepositoriesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        // get the view model
-        viewModel = ViewModelProvider(
-                this,
-                Injection.provideViewModelFactory(requireContext())
-        ).get(SearchRepositoriesViewModel::class.java)
 
         // add dividers between RecyclerView's row items
         val decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)

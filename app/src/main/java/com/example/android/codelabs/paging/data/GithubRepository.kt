@@ -25,11 +25,12 @@ import com.example.android.codelabs.paging.model.RepoSearchResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelChildren
+import javax.inject.Inject
 
 /**
  * Repository class that works with local and remote data sources.
  */
-class GithubRepository(
+class GithubRepository @Inject constructor(
     private val service: GithubService,
     private val cache: GithubLocalCache,
     private val dispatcherProvider: CoroutinesDispatcherProvider

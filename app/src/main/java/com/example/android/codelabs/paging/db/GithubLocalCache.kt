@@ -23,10 +23,9 @@ import com.example.android.codelabs.paging.model.Repo
 import kotlinx.coroutines.withContext
 
 /**
- * Class that handles the DAO local data source. This ensures that methods are triggered on the
- * correct executor.
+ * Class that handles the DAO local data source.
  */
-class GithubLocalCache(
+class GithubLocalCache internal constructor (
     private val repoDao: RepoDao,
     private val dispatcherProvider: CoroutinesDispatcherProvider
 ) {

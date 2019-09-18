@@ -24,12 +24,15 @@ import androidx.paging.PagedList
 import com.example.android.codelabs.paging.data.GithubRepository
 import com.example.android.codelabs.paging.model.Repo
 import com.example.android.codelabs.paging.model.RepoSearchResult
+import javax.inject.Inject
 
 /**
  * ViewModel for the [SearchRepositoriesActivity] screen.
  * The ViewModel works with the [GithubRepository] to get the data.
  */
-class SearchRepositoriesViewModel(private val repository: GithubRepository) : ViewModel() {
+class SearchRepositoriesViewModel @Inject constructor(
+    private val repository: GithubRepository
+) : ViewModel() {
 
     private val queryLiveData = MutableLiveData<String>()
     private val repoResult: LiveData<RepoSearchResult> = Transformations.map(queryLiveData) {

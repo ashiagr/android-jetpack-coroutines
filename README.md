@@ -11,10 +11,10 @@ Refactoring [Codelab Paging app](https://codelabs.developers.google.com/codelabs
 - Paging
 - Room
 
- with
+ to include
 
 - Android Jetpack's
     - Navigation component (with single activity architecture)
 - Kotlin [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html) for reducing needs for callbacks in background operations
-- Dependency Injection with [Dagger 2](https://github.com/google/dagger) - Todo
+- Dependency Injection with [Dagger 2](https://github.com/google/dagger)
 - AndroidX Test - Todo
