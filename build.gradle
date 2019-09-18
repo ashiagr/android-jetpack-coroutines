@@ -64,4 +64,8 @@ ext {
     rulesVersion = "1.0.1"
     junitVersion = "4.12"
     espressoVersion = '3.1.0-beta02'
+    archTestingVersion = '2.0.0'
+    androidXTestCoreVersion = '1.2.0'
+    mockkVersion = '1.9.3'
+    mockWebServerVersion = "4.1.1"
 }
