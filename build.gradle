@@ -60,8 +60,16 @@ ext {
     coroutinesVersion = "1.2.1"
     daggerVersion = "2.23.2"
 
-    runnerVersion = '1.1.0-alpha4'
+    runnerVersion = '1.1.1'
     rulesVersion = "1.0.1"
     junitVersion = "4.12"
-    espressoVersion = '3.1.0-beta02'
+    espressoVersion = '3.1.1'
+    archTestingVersion = '2.0.0'
+    androidXTestCoreVersion = '1.2.0'
+    mockkVersion = '1.9.2' //https://github.com/mockk/mockk/issues/281
+    mockWebServerVersion = "4.1.1"
+    androidXTestExtKotlinRunnerVersion = '1.1.1-beta01'
+    archTestRulesVersion = "1.1.1"
+    robolectricVersion = '4.3-beta-1'
+    fragmentVersion = '1.1.0-alpha09'
 }
