@@ -1,6 +1,6 @@
 Android Kotlin JetPack Playground App
 =====================================
-[![CircleCI](https://circleci.com/gh/agr111/android-paging.svg?style=svg)](https://circleci.com/gh/agr111/android-paging)
+[![CircleCI](https://circleci.com/gh/agr111/android-jetpack-coroutines.svg?style=svg)](https://circleci.com/gh/agr111/android-jetpack-coroutines)
 
 Personal playground app to try out things
 
